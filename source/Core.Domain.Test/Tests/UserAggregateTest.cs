@@ -154,7 +154,7 @@ namespace Core.Domain.Test.Tests
         [Test]
         public void SpeedTest()
         {
-            var total = 10;
+            var total = 15;
             var userId = Guid.NewGuid().ToString();
 
             var user = new User(new UserCreatedEvent()
