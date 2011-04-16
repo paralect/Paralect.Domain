@@ -16,48 +16,6 @@ namespace Paralect.Domain.Test.Tests
     public class UserAggregateTest
     {
         [Test]
-        public void SimpleTest()
-        {
-            var userId = Guid.NewGuid().ToString();
-
-            var event1 = new UserCreatedEvent()
-            {
-                UserId = userId,
-                Email = "test@test.com",
-                FirstName = "John",
-                LastName = "Melinda"
-            };
-
-            var event2 = new UserNameChangedEvent()
-            {
-                UserId = userId,
-                FirstName = "John Jr.",
-                LastName = "Melinda III"
-            };
-
-            var changeset1 = new Changeset(userId, 1);
-            changeset1.AddEvent(event1);
-            changeset1.AddEvent(event2);
-
-            var event3 = new UserEmailChangedEvent()
-            {
-                UserId = userId,
-                Email = "john.jr@test.com",
-            };
-
-            var changeset2 = new Changeset(userId, 2);
-            changeset2.AddEvent(event3);
-
-            using (new AggregateCleanuper(Helper.GetEventServer(), changeset1.AggregateId)) 
-            using (new AggregateCleanuper(Helper.GetEventServer(), changeset2.AggregateId))
-            {
-                var store = Helper.GetEventStore();
-                store.SaveChangeset(changeset1);
-                store.SaveChangeset(changeset2);
-            }
-        }
-
-        [Test]
         public void AggregateTest()
         {
             var userId = Guid.NewGuid().ToString();
@@ -83,15 +41,13 @@ namespace Paralect.Domain.Test.Tests
                 Email = "john.jr@test.com",
             });
 
-            var store = Helper.GetEventStore();
+            var store = Helper.GetRepository();
 
-            using (new AggregateCleanuper(Helper.GetEventServer(), user.Id))
+            using (new AggregateCleanuper(user.Id))
             {
-                store.SaveChangeset(user.CreateChangeset());
+                store.Save(user);
 
-                var persisted = AggregateCreator.CreateAggregateRoot<User>();
-                var aggregateChangesetStream = store.GetChangesetStream(userId);
-                persisted.LoadsFromChangesetStream(aggregateChangesetStream);
+                var persisted = store.GetById<User>(userId);
 
                 Assert.AreEqual(persisted.Id, userId);
                 Assert.AreEqual(persisted.Version, 1);
@@ -137,7 +93,7 @@ namespace Paralect.Domain.Test.Tests
 
             var repository = Helper.GetRepository();
 
-            using (new AggregateCleanuper(Helper.GetEventServer(), user.Id))
+            using (new AggregateCleanuper(user.Id))
             {
                 repository.Save(user);
 
@@ -154,7 +110,7 @@ namespace Paralect.Domain.Test.Tests
         [Test]
         public void SpeedTest()
         {
-            var total = 15;
+            var total = 50;
             var userId = Guid.NewGuid().ToString();
 
             var user = new User(new UserCreatedEvent()
@@ -167,7 +123,7 @@ namespace Paralect.Domain.Test.Tests
 
             var repository = Helper.GetRepository();
 
-            using (new AggregateCleanuper(Helper.GetEventServer(), user.Id))
+            using (new AggregateCleanuper(user.Id))
             {
                 repository.Save(user);
 
@@ -207,6 +163,24 @@ namespace Paralect.Domain.Test.Tests
             }
         }
 
+        [Ignore]
+        public void LoadTest()
+        {
+            //6445c3ec-b2df-4252-b093-4ca748f1de37
+
+            var repository = Helper.GetRepository();
+
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var user = repository.GetById<User>("6445c3ec-b2df-4252-b093-4ca748f1de37");
+            stopwatch.Stop();
+
+            var elapsed = stopwatch.ElapsedMilliseconds;
+
+            
+
+        }
+
         [Test]
         public void ApplyingEventWithoutHandlerTest()
         {
@@ -231,14 +205,8 @@ namespace Paralect.Domain.Test.Tests
                 ButtonText = "Purchase it tomorrow!"
             });
 
-            var changeset = user.CreateChangeset();
-
-            Assert.AreEqual(changeset.Count, 3);
-            Assert.AreEqual(changeset.Events[1].GetType() == typeof(UserClickedOnButtonEvent), true);
-            Assert.AreEqual(changeset.Events[2].GetType() == typeof(UserClickedOnButtonEvent), true);
-
             var repository = Helper.GetRepository();
-            using (new AggregateCleanuper(Helper.GetEventServer(), user.Id))
+            using (new AggregateCleanuper(user.Id))
             {
                 repository.Save(user);
 
@@ -283,7 +251,7 @@ namespace Paralect.Domain.Test.Tests
             Assert.AreEqual(user.Version, 0);
 
             var repository = Helper.GetRepository();
-            using (new AggregateCleanuper(Helper.GetEventServer(), user.Id))
+            using (new AggregateCleanuper(user.Id))
             {
                 repository.Save(user);
                 var stored = repository.GetById<User>(user.Id);

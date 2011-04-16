@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Paralect.Domain.EventStore;
-using Paralect.Domain.EventStore.Providers.MongoDB;
-using Paralect.Domain.EventStore.Providers.MongoDB.Servers;
 using Paralect.Domain.Test.Aggregates;
+using Paralect.Transitions;
+using Paralect.Transitions.Mongo;
 
 namespace Paralect.Domain.Test
 {
@@ -13,20 +12,25 @@ namespace Paralect.Domain.Test
     {
         public static Repository GetRepository()
         {
-            return new Repository(GetEventStore(), null);
+            return new Repository(GetTransitionStorage(), null, new AssemblyQualifiedDataTypeRegistry());
         }
 
-        public static IEventStore GetEventStore()
+        public static ITransitionStorage GetTransitionStorage()
         {
-            EventsServer server = GetEventServer();
-            var store = new MongoDbEventStore(server);
-
-            return store;
+            var server = new TransitionStorage(GetTransitionRepository());
+            return server;
         }
 
-        public static EventsServer GetEventServer()
+        public static MongoTransitionRepository GetTransitionRepository()
         {
-            return new EventsServer("mongodb://localhost:27018/test", "events");
+            return new MongoTransitionRepository(
+                new AssemblyQualifiedDataTypeRegistry(),
+                GetConnectionString());
+        }
+
+        public static String GetConnectionString()
+        {
+            return "mongodb://localhost:27018/test";
         }
     }
 }

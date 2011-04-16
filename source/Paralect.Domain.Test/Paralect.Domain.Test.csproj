@@ -39,9 +39,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\libs\MongoDriver\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="NServiceBus">
-      <HintPath>..\..\libs\NServiceBus\NServiceBus.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\libs\NUnit\nunit.framework.dll</HintPath>
     </Reference>
@@ -69,6 +66,14 @@
     <ProjectReference Include="..\Paralect.Domain\Paralect.Domain.csproj">
       <Project>{21389E45-8900-4A9C-8464-2BAFDB389E76}</Project>
       <Name>Paralect.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Paralect.Transitions.Mongo\Paralect.Transitions.Mongo.csproj">
+      <Project>{D409C831-43FD-4116-BD61-50BB8AAAD842}</Project>
+      <Name>Paralect.Transitions.Mongo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Paralect.Transitions\Paralect.Transitions.csproj">
+      <Project>{C05BB46F-89AE-4DF3-A07E-73FDAD34ED72}</Project>
+      <Name>Paralect.Transitions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

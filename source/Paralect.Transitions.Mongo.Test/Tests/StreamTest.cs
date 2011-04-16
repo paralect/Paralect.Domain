@@ -54,10 +54,13 @@ namespace Paralect.Transitions.Mongo.Test.Tests
                 stream.Write(originalTransitions[2]);
             }
 
-            List<Transition> storedTransitions;
+            List<Transition> storedTransitions = new List<Transition>();
             using (var stream = storage.OpenStream(streamId))
             {
-                storedTransitions = stream.Read().ToList();
+                foreach (var transition in stream.Read())
+                {
+                    storedTransitions.Add(transition);
+                }
             }
 
             TransitionAsserter.AssertTransitions(originalTransitions, storedTransitions);

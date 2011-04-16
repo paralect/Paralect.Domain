@@ -56,7 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChangesetStream.cs" />
     <Compile Include="AggregateRoot.cs" />
     <Compile Include="Command.cs">
       <SubType>Code</SubType>
@@ -67,7 +66,6 @@
     <Compile Include="Event.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Changeset.cs" />
     <Compile Include="EventBus\Providers\ParalectServiceBus\ParalectServiceBusEventBus.cs" />
     <Compile Include="EventBus\Providers\StubBus\StubEventBus.cs" />
     <Compile Include="EventMetadata.cs">
@@ -76,24 +74,24 @@
     <Compile Include="ICommandMetadata.cs" />
     <Compile Include="EventBus\IEventBus.cs" />
     <Compile Include="IEventMetadata.cs" />
-    <Compile Include="EventStore\Providers\MongoDB\MongoDbEventStore.cs" />
     <Compile Include="ICommand.cs" />
-    <Compile Include="EventStore\IEventStore.cs" />
     <Compile Include="IRepository.cs" />
-    <Compile Include="EventStore\Providers\MongoDB\Serialization\ChangesetSerializer.cs" />
-    <Compile Include="EventStore\Providers\MongoDB\Serialization\CommandMetadataSerializer.cs" />
-    <Compile Include="EventStore\Providers\MongoDB\Serialization\EventMetadataSerializer.cs" />
-    <Compile Include="EventStore\Providers\MongoDB\MongoExtensions.cs" />
-    <Compile Include="EventStore\Providers\MongoDB\Servers\EventsServer.cs" />
-    <Compile Include="EventStore\Providers\MongoDB\Servers\LogsServer.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Utilities\AggregateCreator.cs" />
     <Compile Include="Utilities\Infrastructure.cs" />
     <Compile Include="IEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="EventStore\Providers\Memory\" />
+    <ProjectReference Include="..\Paralect.Transitions.Mongo\Paralect.Transitions.Mongo.csproj">
+      <Project>{D409C831-43FD-4116-BD61-50BB8AAAD842}</Project>
+      <Name>Paralect.Transitions.Mongo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Paralect.Transitions\Paralect.Transitions.csproj">
+      <Project>{C05BB46F-89AE-4DF3-A07E-73FDAD34ED72}</Project>
+      <Name>Paralect.Transitions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

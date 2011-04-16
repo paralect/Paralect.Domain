@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Paralect.Domain.Utilities;
+using Paralect.Transitions;
+using System.Linq;
 
 namespace Paralect.Domain
 {
@@ -51,28 +53,31 @@ namespace Paralect.Domain
         /// Create changeset. Used to persist changes in aggregate
         /// </summary>
         /// <returns></returns>
-        public Changeset CreateChangeset()
+        public Transition CreateTransition(IDataTypeRegistry dataTypeRegistry)
         {
             if (String.IsNullOrEmpty(_id))
                 throw new Exception(String.Format("ID was not specified for domain object. AggregateRoot [{0}] doesn't have correct ID. Maybe you forgot to set an _id field?", this.GetType().FullName));
 
-            return new Changeset(_id, _version + 1, Guid.NewGuid().ToString(), _changes);
+            var transitionEvents = _changes.Select(e => new TransitionEvent(
+                dataTypeRegistry.GetTypeId(e.GetType()), e, null)).ToList();
+
+            return new Transition(new TransitionId(_id, _version + 1), transitionEvents, null);
         }
 
         /// <summary>
         /// Load aggreagate from history
         /// </summary>
-        public void LoadsFromChangesetStream(ChangesetStream stream)
+        public void LoadFromTransitionStream(ITransitionStream stream)
         {
-            foreach (var changeset in stream.Changesets)
+            foreach (var transition in stream.Read())
             {
-                foreach (var evnt in changeset.Events)
+                foreach (var evnt in transition.Events)
                 {
-                    Apply(evnt, false);
+                    Apply((IEvent) evnt.Data, false);
                 }
-            }
 
-            _version = stream.LastVersion;
+                _version = transition.Id.Version;
+            }
         }
 
         /// <summary>

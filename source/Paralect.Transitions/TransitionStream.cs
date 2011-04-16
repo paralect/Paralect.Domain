@@ -10,6 +10,7 @@ namespace Paralect.Transitions
         private readonly string _streamId;
         private readonly int _fromVersion;
         private readonly int _toVersion;
+        private Int32 _latestVersion;
         private readonly ITransitionRepository _transitionRepository;
         private Boolean _readStarted = false;
 
@@ -35,9 +36,14 @@ namespace Paralect.Transitions
                 _readStarted = true;
             }
 
+            Transition current = null;
             foreach (var transition in _transitions)
             {
-                yield return transition;
+                if (current != null && current.Id.Version >= transition.Id.Version)
+                    throw new Exception("Incorrect order of transitions.");
+
+                current = transition;
+                yield return current;
             }
         }
 
