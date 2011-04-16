@@ -9,8 +9,8 @@ namespace Paralect.Transitions.Mongo
 {
     public class MongoTransitionRepository : ITransitionRepository
     {
-        private readonly IDataTypeRegistry _dataTypeRegistry;
         private const string _concurrencyException = "E1100";
+        private readonly IDataTypeRegistry _dataTypeRegistry;
         private readonly MongoTransitionServer _server;
         private readonly MongoTransitionSerializer _serializer;
 
@@ -69,12 +69,8 @@ namespace Paralect.Transitions.Mongo
 
         public void RemoveTransition(string streamId, int version)
         {
-            var query = new BsonDocument {
-                {"_id", new BsonDocument {
-                    { "StreamId", streamId },
-                    { "Version", version }
-                }}
-            };
+            var id = _serializer.SerializeTransitionId(new TransitionId(streamId, version));
+            var query = new BsonDocument { {"_id", id } };
 
             _server.Transitions.Remove(new QueryDocument(query));
         }

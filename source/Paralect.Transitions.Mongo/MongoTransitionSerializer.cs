@@ -43,7 +43,7 @@ namespace Paralect.Transitions.Mongo
 
         #region Transition Id Serialization
 
-        private BsonDocument SerializeTransitionId(TransitionId transitionId)
+        public BsonDocument SerializeTransitionId(TransitionId transitionId)
         {
             return new BsonDocument 
             {

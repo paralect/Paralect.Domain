@@ -17,16 +17,12 @@ namespace Paralect.Transitions
 
         public ITransitionStream OpenStream(String streamId, int fromVersion, int toVersion)
         {
-            var transitions = _transitionRepository.GetTransitions(streamId, fromVersion, toVersion);
-
-            var stream = new TransitionStream(streamId, _transitionRepository, transitions);
-
-            return stream;
+            return new TransitionStream(streamId, _transitionRepository, fromVersion, toVersion);
         }
 
-        public ITransitionStream CreateStream(String streamId)
+        public ITransitionStream OpenStream(String streamId)
         {
-            return new TransitionStream(streamId, _transitionRepository, new List<Transition>());
+            return new TransitionStream(streamId, _transitionRepository, 0, Int32.MaxValue);
         }
     }
 }

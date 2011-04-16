@@ -1,9 +1,11 @@
+using System;
+using System.Collections.Generic;
+
 namespace Paralect.Transitions
 {
-    public interface ITransitionStream
+    public interface ITransitionStream : IDisposable
     {
-        void AddEvent(TransitionEvent evnt);
-        void Commit();
-        void Rollback();
+        IEnumerable<Transition> Read();
+        void Write(Transition transition);
     }
 }

@@ -19,6 +19,12 @@ namespace Paralect.Transitions
         /// </summary>
         public TransitionId(string streamId, int version)
         {
+            if (String.IsNullOrEmpty(streamId))
+                throw new ArgumentException("StreamId cannot be null or empty.");
+
+            if (version <= 0)
+                throw new ArgumentException("Transition version cannot be zero or negative.");
+
             StreamId = streamId;
             Version = version;
         }

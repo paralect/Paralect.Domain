@@ -1,45 +1,57 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Paralect.Transitions
 {
     public class TransitionStream : ITransitionStream
     {
         private readonly string _streamId;
-
-        private readonly Int32 _version;
-        
+        private readonly int _fromVersion;
+        private readonly int _toVersion;
         private readonly ITransitionRepository _transitionRepository;
+        private Boolean _readStarted = false;
 
-        private readonly List<Transition> _transitions;
-
-        private readonly List<TransitionEvent> _uncommitedEvents;
-
-        public TransitionStream(String streamId, ITransitionRepository transitionRepository, List<Transition> transitions)
+        private List<Transition> _transitions;
+        private IEnumerator<Transition> _enumerator;
+        
+        public TransitionStream(String streamId, ITransitionRepository transitionRepository, int fromVersion, int toVersion)
         {
             _streamId = streamId;
             _transitionRepository = transitionRepository;
-            _transitions = transitions ?? new List<Transition>();
-            _version = _transitions.Count > 0 ? _transitions[_transitions.Count - 1].Id.Version : 0;
-
-            _uncommitedEvents = new List<TransitionEvent>();
+            _fromVersion = fromVersion;
+            _toVersion = toVersion;
+            _transitions = new List<Transition>();
         }
 
-        public void AddEvent(TransitionEvent evnt)
+        public IEnumerable<Transition> Read()
         {
-            _uncommitedEvents.Add(evnt);
+            // go to storage on first call
+            if (!_readStarted)
+            {
+                // TODO: should be possible to load transitions on demand here
+                _transitions = _transitionRepository.GetTransitions(_streamId, _fromVersion, _toVersion);
+                _readStarted = true;
+            }
+
+            foreach (var transition in _transitions)
+            {
+                yield return transition;
+            }
         }
 
-        public void Commit()
+        public void Write(Transition transition)
         {
-            var id = new TransitionId(_streamId, _version + 1);
-            var transition = new Transition(id, _uncommitedEvents, null);
+            if (_readStarted)
+                throw new InvalidOperationException("You cannot write to stream once you read from it. Open another stream.");
+
             _transitionRepository.SaveTransition(transition);
         }
 
-        public void Rollback()
+        public void Dispose()
         {
-            _uncommitedEvents.Clear();
+            
         }
     }
 }
