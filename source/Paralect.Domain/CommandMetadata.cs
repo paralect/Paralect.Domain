@@ -1,5 +1,5 @@
 using System;
-using MongoDB.Bson.DefaultSerializer;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Paralect.Domain
 {

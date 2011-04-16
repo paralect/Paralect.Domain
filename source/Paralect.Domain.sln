@@ -5,6 +5,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paralect.Domain", "Paralect
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paralect.Domain.Test", "Paralect.Domain.Test\Paralect.Domain.Test.csproj", "{14F6F6A1-3A77-4F97-9BBA-9876149C397F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{55415271-6727-4459-A45B-25CA03EF0C70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paralect.Transitions", "Paralect.Transitions\Paralect.Transitions.csproj", "{C05BB46F-89AE-4DF3-A07E-73FDAD34ED72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paralect.Transitions.Mongo", "Paralect.Transitions.Mongo\Paralect.Transitions.Mongo.csproj", "{D409C831-43FD-4116-BD61-50BB8AAAD842}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paralect.Transitions.Mongo.Test", "Paralect.Transitions.Mongo.Test\Paralect.Transitions.Mongo.Test.csproj", "{5CA77408-AEF5-4A02-BE96-C75206AD5763}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,8 +27,24 @@ Global
 		{14F6F6A1-3A77-4F97-9BBA-9876149C397F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14F6F6A1-3A77-4F97-9BBA-9876149C397F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14F6F6A1-3A77-4F97-9BBA-9876149C397F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C05BB46F-89AE-4DF3-A07E-73FDAD34ED72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C05BB46F-89AE-4DF3-A07E-73FDAD34ED72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C05BB46F-89AE-4DF3-A07E-73FDAD34ED72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C05BB46F-89AE-4DF3-A07E-73FDAD34ED72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D409C831-43FD-4116-BD61-50BB8AAAD842}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D409C831-43FD-4116-BD61-50BB8AAAD842}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D409C831-43FD-4116-BD61-50BB8AAAD842}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D409C831-43FD-4116-BD61-50BB8AAAD842}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CA77408-AEF5-4A02-BE96-C75206AD5763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CA77408-AEF5-4A02-BE96-C75206AD5763}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CA77408-AEF5-4A02-BE96-C75206AD5763}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CA77408-AEF5-4A02-BE96-C75206AD5763}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{14F6F6A1-3A77-4F97-9BBA-9876149C397F} = {55415271-6727-4459-A45B-25CA03EF0C70}
+		{5CA77408-AEF5-4A02-BE96-C75206AD5763} = {55415271-6727-4459-A45B-25CA03EF0C70}
 	EndGlobalSection
 EndGlobal

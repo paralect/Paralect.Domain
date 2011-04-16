@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using MongoDB.Bson;
-using MongoDB.Bson.DefaultSerializer;
 using MongoDB.Bson.Serialization;
 
 namespace Paralect.Domain.EventStore.Providers.MongoDB.Serialization

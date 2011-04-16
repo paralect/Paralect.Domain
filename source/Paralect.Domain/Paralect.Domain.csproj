@@ -44,8 +44,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\libs\MongoDriver\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="NServiceBus">
-      <HintPath>..\..\libs\NServiceBus\NServiceBus.dll</HintPath>
+    <Reference Include="Paralect.ServiceBus">
+      <HintPath>..\..\libs\Paralect.ServiceBus\Paralect.ServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -68,6 +68,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Changeset.cs" />
+    <Compile Include="EventBus\Providers\ParalectServiceBus\ParalectServiceBusEventBus.cs" />
     <Compile Include="EventBus\Providers\StubBus\StubEventBus.cs" />
     <Compile Include="EventMetadata.cs">
       <SubType>Code</SubType>
@@ -86,12 +87,9 @@
     <Compile Include="EventStore\Providers\MongoDB\Servers\EventsServer.cs" />
     <Compile Include="EventStore\Providers\MongoDB\Servers\LogsServer.cs" />
     <Compile Include="Repository.cs" />
-    <Compile Include="EventBus\Providers\NServiceBus\NServiceBusEventBus.cs" />
     <Compile Include="Utilities\AggregateCreator.cs" />
     <Compile Include="Utilities\Infrastructure.cs" />
-    <Compile Include="EventBus\Providers\NServiceBus\ICommand.NServiceBus.cs" />
     <Compile Include="IEvent.cs" />
-    <Compile Include="EventBus\Providers\NServiceBus\IEvent.NServiceBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
