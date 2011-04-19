@@ -13,7 +13,7 @@ namespace Paralect.Transitions.Mongo
         public MongoTransitionSerializer(IDataTypeRegistry dataTypeRegistry)
         {
             _dataTypeRegistry = dataTypeRegistry;
-            _dataSerializer = new MongoTransitionDataSerializer(dataTypeRegistry);
+            _dataSerializer = new MongoTransitionDataSerializer();
         }
 
         /// <summary>

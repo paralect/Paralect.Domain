@@ -1,0 +1,12 @@
+<Project DefaultTargets="Debug" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="Debug">
+    <MSBuild Projects="Paralect.Domain.sln" Targets="Rebuild" />
+  </Target>
+  
+  <Target Name="Info">
+    <Message Text="MSBuildToolsPath: $(MSBuildToolsPath)" />
+    <Message Text="MSBuildExtensionsPath: $(MSBuildExtensionsPath)" />
+  </Target>  
+
+</Project>

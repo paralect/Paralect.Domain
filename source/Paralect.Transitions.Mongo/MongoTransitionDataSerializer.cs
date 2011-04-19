@@ -7,16 +7,6 @@ namespace Paralect.Transitions.Mongo
 {
     public class MongoTransitionDataSerializer
     {
-        private readonly IDataTypeRegistry _dataTypeRegistry;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Object"/> class.
-        /// </summary>
-        public MongoTransitionDataSerializer(IDataTypeRegistry dataTypeRegistry)
-        {
-            _dataTypeRegistry = dataTypeRegistry;
-        }
-
         public Object Deserialize(BsonDocument doc, Type type)
         {
             return BsonSerializer.Deserialize(doc, type);

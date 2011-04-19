@@ -34,7 +34,7 @@ namespace Paralect.Transitions.Mongo.Test.Tests
                 }
             };
 
-            var serializer = new MongoTransitionDataSerializer(new AssemblyQualifiedDataTypeRegistry());
+            var serializer = new MongoTransitionDataSerializer();
             var doc = serializer.Serialize(obj);
 
             var back = (SimpleType) serializer.Deserialize(doc, typeof(SimpleType));

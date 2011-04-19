@@ -59,7 +59,6 @@
     <Compile Include="Events\UserNameChangedEvent.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\MongoTest.cs" />
     <Compile Include="Tests\UserAggregateTest.cs" />
   </ItemGroup>
   <ItemGroup>
