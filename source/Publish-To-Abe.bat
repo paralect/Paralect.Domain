@@ -1,3 +1,6 @@
-copy ".\Paralect.Transitions.Mongo\bin\Debug\Paralect.Domain.dll" "d:\Projects\Abe Project\libs\Paralect.Domain\Paralect.Domain.dll"
+copy ".\Paralect.Domain\bin\Debug\Paralect.Domain.dll" "d:\Projects\Abe Project\libs\Paralect.Domain\Paralect.Domain.dll"
+copy ".\Paralect.Domain\bin\Debug\Paralect.Domain.pdb" "d:\Projects\Abe Project\libs\Paralect.Domain\Paralect.Domain.pdb"
 copy ".\Paralect.Transitions.Mongo\bin\Debug\Paralect.Transitions.Mongo.dll" "d:\Projects\Abe Project\libs\Paralect.Domain\Paralect.Transitions.Mongo.dll"
+copy ".\Paralect.Transitions.Mongo\bin\Debug\Paralect.Transitions.Mongo.pdb" "d:\Projects\Abe Project\libs\Paralect.Domain\Paralect.Transitions.Mongo.pdb"
 copy ".\Paralect.Transitions.Mongo\bin\Debug\Paralect.Transitions.dll" "d:\Projects\Abe Project\libs\Paralect.Domain\Paralect.Transitions.dll"
+copy ".\Paralect.Transitions.Mongo\bin\Debug\Paralect.Transitions.pdb" "d:\Projects\Abe Project\libs\Paralect.Domain\Paralect.Transitions.pdb"

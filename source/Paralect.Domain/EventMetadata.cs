@@ -31,6 +31,11 @@ namespace Paralect.Domain
         /// Assembly qualified CLR Type name
         /// </summary>
         public String TypeName { get; set; }
+
+        /// <summary>
+        /// Was transfered from previous system
+        /// </summary>
+        public Boolean TransferedEvent { get; set; }
     }
 
 
