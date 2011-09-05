@@ -22,6 +22,7 @@ namespace Paralect.Transitions.Mongo
             
             _server.Transitions.EnsureIndex(
                 IndexKeys.Ascending("_id.StreamId", "_id.Version"));
+            _server.Transitions.EnsureIndex(IndexKeys.Ascending("Timestamp"));
         }
 
         public void SaveTransition(Transition transition)
