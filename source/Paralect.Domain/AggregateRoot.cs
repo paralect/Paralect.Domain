@@ -14,9 +14,10 @@ namespace Paralect.Domain
         protected string _id;
 
         /// <summary>
-        /// Aggregate version
+        /// Aggregate version. Version 0 means that object was just created.
+        /// Once object will be saved it version will be >= 1.
         /// </summary>
-        private int _version;
+        private int _version = 0;
 
         /// <summary>
         /// List of changes (i.e. list os pending events)
@@ -29,7 +30,6 @@ namespace Paralect.Domain
         public String Id
         {
             get { return _id; } 
-            protected set { _id = value; }
         }
 
         /// <summary>
@@ -41,9 +41,6 @@ namespace Paralect.Domain
             internal set { _version = value; }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Object"/> class.
-        /// </summary>
         protected AggregateRoot()
         {
             
@@ -61,7 +58,7 @@ namespace Paralect.Domain
             var transitionEvents = _changes.Select(e => new TransitionEvent(
                 dataTypeRegistry.GetTypeId(e.GetType()), e, null)).ToList();
 
-            return new Transition(new TransitionId(_id, _version + 1), transitionEvents, null);
+            return new Transition(new TransitionId(_id, _version + 1), DateTime.UtcNow, transitionEvents, null);
         }
 
         /// <summary>
@@ -78,6 +75,21 @@ namespace Paralect.Domain
 
                 _version = transition.Id.Version;
             }
+        }
+
+        /// <summary>
+        /// Load aggregate from events
+        /// </summary>
+        /// <param name="events"></param>
+        /// <param name="version"></param>
+        public void LoadFromEvents(IEnumerable<IEvent> events, Int32 version = 1)
+        {
+            foreach (var evnt in events)
+            {
+                Apply(evnt, false);
+            }
+
+            _version = version;            
         }
 
         /// <summary>

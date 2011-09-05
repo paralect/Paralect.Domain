@@ -67,6 +67,21 @@ namespace Paralect.Transitions.Mongo
             return transitions;
         }
 
+        /// <summary>
+        /// Get all transitions ordered ascendantly by Timestamp of transiton
+        /// Should be used only for testing and for very simple event replying 
+        /// </summary>
+        public List<Transition> GetTransitions()
+        {
+            var docs = _server.Transitions.FindAllAs<BsonDocument>()
+                .SetSortOrder(SortBy.Ascending("Timestamp"))
+                .ToList();
+
+            var transitions = docs.Select(_serializer.Deserialize).ToList();
+
+            return transitions;            
+        }
+
         public void RemoveTransition(string streamId, int version)
         {
             var id = _serializer.SerializeTransitionId(new TransitionId(streamId, version));

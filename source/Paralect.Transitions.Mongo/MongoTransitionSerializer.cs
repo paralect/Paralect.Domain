@@ -24,6 +24,7 @@ namespace Paralect.Transitions.Mongo
             return new BsonDocument 
             {
                 { "_id", SerializeTransitionId(transition.Id) },
+                { "Timestamp", transition.Timestamp },
                 { "Events", SerializeTransitionEvents(transition.Events) },
                 { "Metadata", SerializeMetadata(transition.Metadata) },
             };
@@ -35,9 +36,10 @@ namespace Paralect.Transitions.Mongo
         public Transition Deserialize(BsonDocument doc)
         {
             var transitionId = DeserializeTransitionId(doc["_id"]);
+            var datetime = doc["Timestamp"].AsDateTime;
             var events = DeserializeTransitionEvents(doc["Events"]);
             var metadata = DeserializeMetadata(doc["Metadata"]);
-            return new Transition(transitionId, events, metadata);
+            return new Transition(transitionId, datetime, events, metadata);
         }
 
 

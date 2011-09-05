@@ -15,7 +15,7 @@ namespace Paralect.Domain.Test.Aggregates
         /// <summary>
         /// Close access to default constructor for aggregate consumers
         /// </summary>
-        private User() { }
+        private User() {}
 
         public User(UserCreatedEvent createdEvent)
         {

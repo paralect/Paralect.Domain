@@ -43,6 +43,7 @@
     <Compile Include="AssemblyQualifiedDataTypeRegistry.cs" />
     <Compile Include="ConcurrencyException.cs" />
     <Compile Include="IDataTypeRegistry.cs" />
+    <Compile Include="InMemoryTransitionRepository.cs" />
     <Compile Include="ISnapshotRepository.cs" />
     <Compile Include="ITransitionRepository.cs" />
     <Compile Include="ITransitionStorage.cs" />

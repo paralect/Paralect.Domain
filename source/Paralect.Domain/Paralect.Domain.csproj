@@ -66,8 +66,8 @@
     <Compile Include="Event.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EventBus\Providers\ParalectServiceBus\ParalectServiceBusEventBus.cs" />
-    <Compile Include="EventBus\Providers\StubBus\StubEventBus.cs" />
+    <Compile Include="EventBus\ParalectServiceBusEventBus.cs" />
+    <Compile Include="EventBus\InMemoryEventBus.cs" />
     <Compile Include="EventMetadata.cs">
       <SubType>Code</SubType>
     </Compile>

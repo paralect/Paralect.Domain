@@ -25,6 +25,7 @@ namespace Paralect.Transitions.Mongo.Test.Tests
 
             return new Transition(
                 new TransitionId(streamId, version), 
+                DateTime.UtcNow,
                 new List<TransitionEvent> { transitionEvent }, 
                 null);
         }

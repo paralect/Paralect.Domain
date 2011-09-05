@@ -236,6 +236,35 @@ namespace Paralect.Domain.Test.Tests
         }
 
         [Test]
+        public void PossibleToLoadFromEvents()
+        {
+            var user = AggregateCreator.CreateAggregateRoot<User>();
+
+            var created = new UserCreatedEvent()
+            {
+                UserId = "3333",
+                Email = "test@test.com",
+                FirstName = "John",
+                LastName = "Melinda"
+            };
+
+            var changed = new UserNameChangedEvent()
+            {
+                UserId = "3333",
+                FirstName = "John Jr.",
+                LastName = "Melinda III"
+            };
+
+            user.LoadFromEvents(new List<IEvent> { created, changed });
+
+            Assert.AreEqual(user.Id, created.UserId);
+            Assert.AreEqual(user.Version, 1);
+            Assert.AreEqual(GetPrivateValue<String>(user, "_firstName"), changed.FirstName);
+            Assert.AreEqual(GetPrivateValue<String>(user, "_lastName"), changed.LastName);
+            Assert.AreEqual(GetPrivateValue<String>(user, "_email"), created.Email);
+        }
+
+        [Test]
         public void VersionOfNewlySavedAggregateShouldBeOne()
         {
             var userId = Guid.NewGuid().ToString();

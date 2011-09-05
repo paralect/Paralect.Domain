@@ -24,7 +24,7 @@ namespace Paralect.Transitions.Mongo.Test.Tests
             };
 
             var transitions = new List<Transition> {
-                new Transition(new TransitionId(streamId, 1), events, null)
+                new Transition(new TransitionId(streamId, 1), DateTime.UtcNow, events, null)
             };
 
             repository.SaveTransition(transitions[0]);
@@ -51,9 +51,9 @@ namespace Paralect.Transitions.Mongo.Test.Tests
             };
 
             var transitions = new List<Transition>{
-                new Transition(new TransitionId(streamId, 1), events, null),
-                new Transition(new TransitionId(streamId, 2), events, null),
-                new Transition(new TransitionId(streamId, 3), events, null)
+                new Transition(new TransitionId(streamId, 1), DateTime.UtcNow, events, null),
+                new Transition(new TransitionId(streamId, 2), DateTime.UtcNow, events, null),
+                new Transition(new TransitionId(streamId, 3), DateTime.UtcNow, events, null)
             };
 
             repository.SaveTransition(transitions[0]);
@@ -82,9 +82,9 @@ namespace Paralect.Transitions.Mongo.Test.Tests
             };
 
             var transitions = new List<Transition>{
-                new Transition(new TransitionId(streamId, 1), events, null),
-                new Transition(new TransitionId(streamId, 2), events, null),
-                new Transition(new TransitionId(streamId, 3), events, null)
+                new Transition(new TransitionId(streamId, 1), DateTime.UtcNow, events, null),
+                new Transition(new TransitionId(streamId, 2), DateTime.UtcNow, events, null),
+                new Transition(new TransitionId(streamId, 3), DateTime.UtcNow, events, null)
             };
 
             repository.SaveTransition(transitions[0]);
@@ -122,8 +122,8 @@ namespace Paralect.Transitions.Mongo.Test.Tests
             };
 
             var transitions = new List<Transition> {
-                new Transition(new TransitionId(streamId, 1), events, null), 
-                new Transition(new TransitionId(streamId, 1), events, null) // Already existed version specified!
+                new Transition(new TransitionId(streamId, 1), DateTime.UtcNow, events, null), 
+                new Transition(new TransitionId(streamId, 1), DateTime.UtcNow, events, null) // Already existed version specified!
             };
 
             repository.SaveTransition(transitions[0]);
