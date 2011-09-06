@@ -16,5 +16,10 @@ namespace Paralect.Transitions
 
         void RemoveTransition(String streamId, Int32 version);
         void RemoveStream(String streamId);
+
+        /// <summary>
+        /// Build indexes for transitions
+        /// </summary>
+        void EnsureIndexes();
     }
 }

@@ -30,7 +30,7 @@ namespace Paralect.Domain.Test
 
         public static String GetConnectionString()
         {
-            return "mongodb://localhost:27018/test";
+            return "mongodb://admin(admin):1@orsich-pc:27020/test";
         }
     }
 }

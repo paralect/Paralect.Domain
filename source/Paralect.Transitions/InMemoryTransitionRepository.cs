@@ -40,5 +40,10 @@ namespace Paralect.Transitions
         {
             _transitions.RemoveAll(t => t.Id.StreamId == streamId);
         }
+
+        public void EnsureIndexes()
+        {
+            throw new NotSupportedException("In Memory Repository does not need indexes.");
+        }
     }
 }
