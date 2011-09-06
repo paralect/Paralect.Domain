@@ -19,9 +19,14 @@ namespace Paralect.Transitions.Mongo
             _dataTypeRegistry = dataTypeRegistry;
             _serializer = new MongoTransitionSerializer(dataTypeRegistry);
             _server = new MongoTransitionServer(connectionString, collectionName);
-            
-            _server.Transitions.EnsureIndex(
-                IndexKeys.Ascending("_id.StreamId", "_id.Version"));
+
+            EnsureIndexes();
+        }
+
+        public void EnsureIndexes()
+        {
+            _server.Transitions.EnsureIndex(IndexKeys.Ascending("_id.StreamId"));
+            _server.Transitions.EnsureIndex(IndexKeys.Ascending("_id.Version"));
             _server.Transitions.EnsureIndex(IndexKeys.Ascending("Timestamp"));
         }
 
@@ -48,10 +53,8 @@ namespace Paralect.Transitions.Mongo
 
         public List<Transition> GetTransitions(string streamId, int fromVersion, int toVersion)
         {
-            var query = Query.And(
-                Query.EQ("_id.StreamId", streamId),
-                Query.GTE("_id.Version", fromVersion),
-                Query.LTE("_id.Version", toVersion));
+            var query = Query.And(Query.EQ("_id.StreamId", streamId),
+                                  Query.GTE("_id.Version", fromVersion).LTE(toVersion));
 
             var sort = SortBy.Ascending("_id.Version");
 
