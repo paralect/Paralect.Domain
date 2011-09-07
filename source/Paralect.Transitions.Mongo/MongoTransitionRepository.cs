@@ -78,26 +78,26 @@ namespace Paralect.Transitions.Mongo
         public List<Transition> GetTransitions()
         {
             var docs = _server.Transitions.FindAllAs<BsonDocument>()
-                .SetSortOrder(SortBy.Ascending("Timestamp"))
+                .SetSortOrder(SortBy.Ascending("Timestamp", "_id.Version"))
                 .ToList();
 
             var transitions = docs.Select(_serializer.Deserialize).ToList();
 
-            return transitions;            
+            return transitions;
         }
 
         public void RemoveTransition(string streamId, int version)
         {
             var id = _serializer.SerializeTransitionId(new TransitionId(streamId, version));
-            var query = new BsonDocument { {"_id", id } };
+            var query = new BsonDocument { { "_id", id } };
 
             _server.Transitions.Remove(new QueryDocument(query));
         }
 
         public void RemoveStream(String streamId)
         {
-            var query = new BsonDocument { {"_id.StreamId", streamId } };
-            _server.Transitions.Remove(new QueryDocument(query));            
+            var query = new BsonDocument { { "_id.StreamId", streamId } };
+            _server.Transitions.Remove(new QueryDocument(query));
         }
     }
 }

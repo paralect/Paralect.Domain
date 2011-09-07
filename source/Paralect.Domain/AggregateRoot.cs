@@ -29,7 +29,7 @@ namespace Paralect.Domain
         /// </summary>
         public String Id
         {
-            get { return _id; } 
+            get { return _id; }
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Paralect.Domain
 
         protected AggregateRoot()
         {
-            
+
         }
 
         /// <summary>
@@ -55,8 +55,13 @@ namespace Paralect.Domain
             if (String.IsNullOrEmpty(_id))
                 throw new Exception(String.Format("ID was not specified for domain object. AggregateRoot [{0}] doesn't have correct ID. Maybe you forgot to set an _id field?", this.GetType().FullName));
 
-            var transitionEvents = _changes.Select(e => new TransitionEvent(
-                dataTypeRegistry.GetTypeId(e.GetType()), e, null)).ToList();
+            var transitionEvents = new List<TransitionEvent>();
+            foreach (var e in _changes)
+            {
+                e.Metadata.StoredDate = DateTime.UtcNow;
+                e.Metadata.TypeName = e.GetType().Name;
+                transitionEvents.Add(new TransitionEvent(dataTypeRegistry.GetTypeId(e.GetType()), e, null));
+            }
 
             return new Transition(new TransitionId(_id, _version + 1), DateTime.UtcNow, transitionEvents, null);
         }

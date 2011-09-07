@@ -39,6 +39,7 @@ namespace Paralect.Transitions
             Id = transitionId;
             Events = events;
             Metadata = metadata ?? new Dictionary<String, Object>();
+            Timestamp = timestamp;
         }
     }
 }
