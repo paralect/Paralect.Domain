@@ -42,6 +42,8 @@
   <ItemGroup>
     <Compile Include="AssemblyQualifiedDataTypeRegistry.cs" />
     <Compile Include="ConcurrencyException.cs" />
+    <Compile Include="IncorrectOrderOfTransitionsException.cs" />
+    <Compile Include="DuplicateTransitionException.cs" />
     <Compile Include="IDataTypeRegistry.cs" />
     <Compile Include="InMemoryTransitionRepository.cs" />
     <Compile Include="ISnapshotRepository.cs" />

@@ -28,6 +28,7 @@ namespace Paralect.Transitions.Mongo
             _server.Transitions.EnsureIndex(IndexKeys.Ascending("_id.StreamId"));
             _server.Transitions.EnsureIndex(IndexKeys.Ascending("_id.Version"));
             _server.Transitions.EnsureIndex(IndexKeys.Ascending("Timestamp"));
+            _server.Transitions.EnsureIndex(IndexKeys.Ascending("Timestamp", "_id.Version"));
         }
 
         public void SaveTransition(Transition transition)
@@ -47,7 +48,7 @@ namespace Paralect.Transitions.Mongo
                 if (!e.Message.Contains(_concurrencyException))
                     throw;
 
-                throw new ConcurrencyException(String.Format("Transition ({0}, {1}) already exists.", transition.Id.StreamId, transition.Id.Version));
+                throw new DuplicateTransitionException(transition.Id.StreamId, transition.Id.Version, e);
             }
         }
 

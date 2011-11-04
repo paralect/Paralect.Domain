@@ -24,6 +24,9 @@ namespace Paralect.Domain
 
         public void Save(AggregateRoot aggregate)
         {
+            if (String.IsNullOrEmpty(aggregate.Id))
+                throw new ArgumentException("Aggregate id was not specified.");
+
             var transition = aggregate.CreateTransition(_dataTypeRegistry);
 
             using (var stream = _transitionStorage.OpenStream(transition.Id.StreamId))
@@ -32,12 +35,15 @@ namespace Paralect.Domain
             }
 
             if (_eventBus != null)
-                _eventBus.Publish(transition.Events.Select(e => (IEvent) e.Data).ToList<IEvent>());
+                _eventBus.Publish(transition.Events.Select(e => (IEvent)e.Data).ToList<IEvent>());
         }
 
         public TAggregate GetById<TAggregate>(String id)
             where TAggregate : AggregateRoot
         {
+            if (String.IsNullOrEmpty(id))
+                throw new ArgumentException("Aggregate id was not specified.");
+
             var stream = _transitionStorage.OpenStream(id);
 
             var obj = AggregateCreator.CreateAggregateRoot<TAggregate>();

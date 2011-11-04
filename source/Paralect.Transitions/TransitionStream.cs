@@ -16,7 +16,7 @@ namespace Paralect.Transitions
 
         private List<Transition> _transitions;
         private IEnumerator<Transition> _enumerator;
-        
+
         public TransitionStream(String streamId, ITransitionRepository transitionRepository, int fromVersion, int toVersion)
         {
             _streamId = streamId;
@@ -40,7 +40,7 @@ namespace Paralect.Transitions
             foreach (var transition in _transitions)
             {
                 if (current != null && current.Id.Version >= transition.Id.Version)
-                    throw new Exception("Incorrect order of transitions.");
+                    throw new IncorrectOrderOfTransitionsException("Order of Aggreagate Root transitions should be ascending by Version (1, 2, 10, ..., 15)");
 
                 current = transition;
                 yield return current;
@@ -52,12 +52,24 @@ namespace Paralect.Transitions
             if (_readStarted)
                 throw new InvalidOperationException("You cannot write to stream once you read from it. Open another stream.");
 
-            _transitionRepository.SaveTransition(transition);
+            try
+            {
+                _transitionRepository.SaveTransition(transition);
+            }
+            catch (DuplicateTransitionException e)
+            {
+                if (e.VersionId > 1)
+                {
+                    throw new ConcurrencyException("Transition with same Version was saved before.");
+                }
+
+                throw;
+            }
         }
 
         public void Dispose()
         {
-            
+
         }
     }
 }
