@@ -23,12 +23,30 @@ namespace Paralect.Transitions.Mongo
             EnsureIndexes();
         }
 
+        private Dictionary<BsonDocument, IndexKeysBuilder> RequiredIndexes()
+        {
+            return new Dictionary<BsonDocument, IndexKeysBuilder>()
+            {
+                {new BsonDocument("_id.StreamId", 1), IndexKeys.Ascending("_id.StreamId")},
+                {new BsonDocument("_id.Version", 1), IndexKeys.Ascending("_id.Version")},
+                {new BsonDocument("Timestamp", 1), IndexKeys.Ascending("Timestamp")},
+                {new BsonDocument()
+                     {
+                         new BsonElement("Timestamp", 1),
+                         new BsonElement("_id.Version", 1),
+                         
+                     }, IndexKeys.Ascending("Timestamp", "_id.Version")},
+            };
+        }
+
         public void EnsureIndexes()
         {
-            _server.Transitions.EnsureIndex(IndexKeys.Ascending("_id.StreamId"));
-            _server.Transitions.EnsureIndex(IndexKeys.Ascending("_id.Version"));
-            _server.Transitions.EnsureIndex(IndexKeys.Ascending("Timestamp"));
-            _server.Transitions.EnsureIndex(IndexKeys.Ascending("Timestamp", "_id.Version"));
+            var indexes = _server.Transitions.GetIndexes().Select(x => x["key"] as BsonDocument).ToList();
+            foreach (var index in RequiredIndexes())
+            {
+                if (!indexes.Contains(index.Key))
+                    _server.Transitions.CreateIndex(index.Value);
+            }
         }
 
         public void SaveTransition(Transition transition)
