@@ -6,41 +6,40 @@ namespace Paralect.Transitions.Mongo
 {
     public class MongoTransitionServer
     {
-        /// <summary>
-        /// MongoDB Server
-        /// </summary>
         private readonly MongoServer _server;
 
-        /// <summary>
-        /// Name of database 
-        /// </summary>
         private readonly string _databaseName;
 
         /// <summary>
         /// Collection for storing commits data
         /// </summary>
-        private readonly string _collectionName;
+        private const string TransaitonsCollectionName = "transitions";
+        private const string SnapshotsCollectionName = "snapshots";
 
         private readonly MongoCollectionSettings<BsonDocument> _transitionSettings;
+        private readonly MongoCollectionSettings<BsonDocument> _snapshotSettings;
 
         /// <summary>
         /// Opens connection to MongoDB Server
         /// </summary>
-        public MongoTransitionServer(String connectionString, String collectionName)
+        public MongoTransitionServer(String connectionString)
         {
-            _collectionName = collectionName;
             _databaseName = MongoUrl.Create(connectionString).DatabaseName;
             _server = MongoServer.Create(connectionString);
 
-            _transitionSettings = Database.CreateCollectionSettings<BsonDocument>(_collectionName);
+            _transitionSettings = Database.CreateCollectionSettings<BsonDocument>(TransaitonsCollectionName);
             _transitionSettings.SafeMode = SafeMode.True;
             _transitionSettings.AssignIdOnInsert = false;
+
+            _snapshotSettings = Database.CreateCollectionSettings<BsonDocument>(SnapshotsCollectionName);
+            _snapshotSettings.SafeMode = SafeMode.True;
+            _snapshotSettings.AssignIdOnInsert = false;
         }
 
         /// <summary>
         /// MongoDB Server
         /// </summary>
-        public MongoServer Server
+        public MongoDB.Driver.MongoServer Server
         {
             get { return _server; }
         }
@@ -59,6 +58,11 @@ namespace Paralect.Transitions.Mongo
         public MongoCollection<BsonDocument> Transitions
         {
             get { return Database.GetCollection(_transitionSettings); }
+        }
+
+        public MongoCollection<BsonDocument> Snapshots
+        {
+            get { return Database.GetCollection(_snapshotSettings); }
         }
     }
 }

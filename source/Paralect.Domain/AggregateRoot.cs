@@ -30,6 +30,7 @@ namespace Paralect.Domain
         public String Id
         {
             get { return _id; }
+            set { _id = value; }
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace Paralect.Domain
         public int Version
         {
             get { return _version; }
-            internal set { _version = value; }
+            set { _version = value; }
         }
 
         protected AggregateRoot()

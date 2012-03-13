@@ -11,14 +11,14 @@ namespace Paralect.Transitions.Mongo
     {
         private const string _concurrencyException = "E1100";
         private readonly IDataTypeRegistry _dataTypeRegistry;
-        private readonly MongoTransitionServer _server;
+        private readonly MongoTransitionServer _transitionServer;
         private readonly MongoTransitionSerializer _serializer;
 
-        public MongoTransitionRepository(IDataTypeRegistry dataTypeRegistry, String connectionString, String collectionName = "transitions")
+        public MongoTransitionRepository(IDataTypeRegistry dataTypeRegistry, String connectionString)
         {
             _dataTypeRegistry = dataTypeRegistry;
             _serializer = new MongoTransitionSerializer(dataTypeRegistry);
-            _server = new MongoTransitionServer(connectionString, collectionName);
+            _transitionServer = new MongoTransitionServer(connectionString);
 
             EnsureIndexes();
         }
@@ -41,12 +41,15 @@ namespace Paralect.Transitions.Mongo
 
         public void EnsureIndexes()
         {
-            var indexes = _server.Transitions.GetIndexes().Select(x => x["key"] as BsonDocument).ToList();
+            var indexes = _transitionServer.Transitions.GetIndexes().Select(x => x["key"] as BsonDocument).ToList();
             foreach (var index in RequiredIndexes())
             {
                 if (!indexes.Contains(index.Key))
-                    _server.Transitions.CreateIndex(index.Value);
+                    _transitionServer.Transitions.CreateIndex(index.Value);
             }
+
+            _transitionServer.Snapshots.EnsureIndex(IndexKeys.Ascending("_id.StreamId").Descending("_id.Version"));
+            _transitionServer.Snapshots.EnsureIndex(IndexKeys.Ascending("_id.StreamId"));
         }
 
         public void SaveTransition(Transition transition)
@@ -59,7 +62,7 @@ namespace Paralect.Transitions.Mongo
 
             try
             {
-                _server.Transitions.Insert(doc, SafeMode.True);
+                _transitionServer.Transitions.Insert(doc, SafeMode.True);
             }
             catch (MongoException e)
             {
@@ -77,12 +80,15 @@ namespace Paralect.Transitions.Mongo
 
             var sort = SortBy.Ascending("_id.Version");
 
-            var docs = _server.Transitions.FindAs<BsonDocument>(query)
+            var docs = _transitionServer.Transitions.FindAs<BsonDocument>(query)
                 .SetSortOrder(sort)
                 .ToList();
 
             // Check that such stream exists
-            if (docs.Count < 1)
+            if (docs.Count < 1 
+                //when use snapshots fromVersion can be bigger then 0 or 1
+                //in such situations we no need check if stream exists
+                && (fromVersion == 0 || fromVersion == 1)) 
                 throw new ArgumentException(String.Format("There is no stream in store with id {0}", streamId));
 
             var transitions = docs.Select(_serializer.Deserialize).ToList();
@@ -96,7 +102,7 @@ namespace Paralect.Transitions.Mongo
         /// </summary>
         public List<Transition> GetTransitions()
         {
-            var docs = _server.Transitions.FindAllAs<BsonDocument>()
+            var docs = _transitionServer.Transitions.FindAllAs<BsonDocument>()
                 .SetSortOrder(SortBy.Ascending("Timestamp", "_id.Version"))
                 .ToList();
 
@@ -110,13 +116,13 @@ namespace Paralect.Transitions.Mongo
             var id = _serializer.SerializeTransitionId(new TransitionId(streamId, version));
             var query = new BsonDocument { { "_id", id } };
 
-            _server.Transitions.Remove(new QueryDocument(query));
+            _transitionServer.Transitions.Remove(new QueryDocument(query));
         }
 
         public void RemoveStream(String streamId)
         {
             var query = new BsonDocument { { "_id.StreamId", streamId } };
-            _server.Transitions.Remove(new QueryDocument(query));
+            _transitionServer.Transitions.Remove(new QueryDocument(query));
         }
     }
 }

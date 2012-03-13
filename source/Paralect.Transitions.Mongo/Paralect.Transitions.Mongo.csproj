@@ -37,6 +37,9 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\..\libs\MongoDriver\MongoDB.Driver.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\libs\Newtonsoft.Json\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MongoSnapshotRepository.cs" />
     <Compile Include="MongoTransitionDataSerializer.cs" />
     <Compile Include="MongoTransitionRepository.cs" />
     <Compile Include="MongoTransitionSerializer.cs" />
