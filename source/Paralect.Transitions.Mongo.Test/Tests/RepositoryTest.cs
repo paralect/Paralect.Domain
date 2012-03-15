@@ -91,6 +91,8 @@ namespace Paralect.Transitions.Mongo.Test.Tests
             repository.SaveTransition(transitions[1]);
             repository.SaveTransition(transitions[2]);
 
+            #region search within defined stream
+
             var storedTransitions = repository.GetTransitions(streamId, 1, 3);
             TransitionAsserter.AssertTransitions(transitions, storedTransitions);
 
@@ -102,6 +104,27 @@ namespace Paralect.Transitions.Mongo.Test.Tests
 
             var storedTransitions4 = repository.GetTransitions(streamId, 2, 3);
             TransitionAsserter.AssertTransitions(new List<Transition> { transitions[1], transitions[2] }, storedTransitions4);
+
+            #endregion
+
+            #region search everywhere
+
+            var storedTransitions5 = repository.GetTransitions(0, 3);
+            TransitionAsserter.AssertTransitions(transitions, storedTransitions5);
+
+            var storedTransitions6 = repository.GetTransitions(1, 1);
+            TransitionAsserter.AssertTransitions(new List<Transition> { transitions[1] }, storedTransitions6);
+
+            var storedTransitions7 = repository.GetTransitions(1, 2);
+            TransitionAsserter.AssertTransitions(new List<Transition> { transitions[1], transitions[2] }, storedTransitions7);
+
+            var storedTransitions8 = repository.GetTransitions(2, 100);
+            TransitionAsserter.AssertTransitions(new List<Transition> { transitions[2] }, storedTransitions8);
+
+            var storedTransitions9 = repository.GetTransitions(3, 1);
+            Assert.IsEmpty(storedTransitions9);
+
+            #endregion
 
             repository.RemoveStream(streamId);            
         }

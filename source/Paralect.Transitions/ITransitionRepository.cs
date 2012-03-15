@@ -7,6 +7,7 @@ namespace Paralect.Transitions
     {
         void SaveTransition(Transition transition);
         List<Transition> GetTransitions(String streamId, Int32 fromVersion, Int32 toVersion);
+        List<Transition> GetTransitions(Int32 startIndex, Int32 count);
 
         /// <summary>
         /// Get all transitions ordered ascendantly by Timestamp of transiton

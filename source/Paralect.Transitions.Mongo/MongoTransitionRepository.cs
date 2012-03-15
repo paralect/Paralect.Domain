@@ -96,6 +96,23 @@ namespace Paralect.Transitions.Mongo
             return transitions;
         }
 
+        public List<Transition> GetTransitions(int startIndex, int count)
+        {
+            var query = Query.And();
+
+            var sort = SortBy.Ascending("_id.Version");
+
+            var docs = _transitionServer.Transitions.FindAs<BsonDocument>(query)
+                .SetSkip(startIndex)
+                .SetLimit(count)
+                .SetSortOrder(sort)
+                .ToList();
+
+            var transitions = docs.Select(_serializer.Deserialize).ToList();
+
+            return transitions;
+        }
+
         /// <summary>
         /// Get all transitions ordered ascendantly by Timestamp of transiton
         /// Should be used only for testing and for very simple event replying 
