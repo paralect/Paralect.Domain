@@ -1,4 +1,4 @@
-﻿ServiceBus
+﻿Paralect.Domain (EventStore)
 ==========
 
 Usage
