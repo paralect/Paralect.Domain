@@ -75,6 +75,27 @@ namespace Paralect.Transitions.Mongo.Test.Tests
             var streamId = Guid.NewGuid().ToString();
             var storage = new TransitionStorage(GetRepository());
             var originalTransitions = new List<Transition> {
+                CreatedTransition(streamId, 2),
+                CreatedTransition(streamId, 2),
+                CreatedTransition(streamId, 2)
+            };
+
+            using (var stream = storage.OpenStream(streamId))
+            {
+                stream.Write(originalTransitions[0]);
+                Assert.Throws<ConcurrencyException>(()=> stream.Write(originalTransitions[1]));
+                Assert.Throws<ConcurrencyException>(() => stream.Write(originalTransitions[2]));
+            }
+
+            GetRepository().RemoveStream(streamId);
+        }
+
+        [Test]
+        public void ShouldThrowOnDuplicationWhenVersion1()
+        {
+            var streamId = Guid.NewGuid().ToString();
+            var storage = new TransitionStorage(GetRepository());
+            var originalTransitions = new List<Transition> {
                 CreatedTransition(streamId, 1),
                 CreatedTransition(streamId, 1),
                 CreatedTransition(streamId, 1)
@@ -83,8 +104,8 @@ namespace Paralect.Transitions.Mongo.Test.Tests
             using (var stream = storage.OpenStream(streamId))
             {
                 stream.Write(originalTransitions[0]);
-                Assert.Throws<ConcurrencyException>(()=> stream.Write(originalTransitions[1]));
-                Assert.Throws<ConcurrencyException>(() => stream.Write(originalTransitions[2]));
+                Assert.Throws<DuplicateTransitionException>(()=> stream.Write(originalTransitions[1]));
+                Assert.Throws<DuplicateTransitionException>(() => stream.Write(originalTransitions[2]));
             }
 
             GetRepository().RemoveStream(streamId);

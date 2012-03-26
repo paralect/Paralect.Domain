@@ -128,7 +128,7 @@ namespace Paralect.Transitions.Mongo.Test.Tests
 
             repository.SaveTransition(transitions[0]);
             
-            Assert.Throws<ConcurrencyException>(() => repository.SaveTransition(transitions[0]));
+            Assert.Throws<DuplicateTransitionException>(() => repository.SaveTransition(transitions[0]));
             
             repository.RemoveStream(streamId);
         }
