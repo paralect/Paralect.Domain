@@ -78,7 +78,7 @@ namespace Paralect.Transitions.Mongo
             var query = Query.And(Query.EQ("_id.StreamId", streamId),
                                   Query.GTE("_id.Version", fromVersion).LTE(toVersion));
 
-            var sort = SortBy.Ascending("Timestamp", "_id.Version");
+            var sort = SortBy.Ascending("_id.Version");
 
             var docs = _transitionServer.Transitions.FindAs<BsonDocument>(query)
                 .SetSortOrder(sort)
