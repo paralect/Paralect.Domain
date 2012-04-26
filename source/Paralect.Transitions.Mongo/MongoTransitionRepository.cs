@@ -113,6 +113,11 @@ namespace Paralect.Transitions.Mongo
             return transitions;
         }
 
+        public Int64 CountTransitions()
+        {
+            return _transitionServer.Transitions.Count();
+        }
+
         /// <summary>
         /// Get all transitions ordered ascendantly by Timestamp of transiton
         /// Should be used only for testing and for very simple event replying 

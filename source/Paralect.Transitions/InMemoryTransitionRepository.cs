@@ -27,6 +27,11 @@ namespace Paralect.Transitions
             return _transitions.Skip(startIndex).Take(count).ToList();
         }
 
+        public Int64 CountTransitions()
+        {
+            return _transitions.Count;
+        }
+
         /// <summary>
         /// Get all transitions ordered ascendantly by Timestamp of transiton
         /// Should be used only for testing and for very simple event replying 
