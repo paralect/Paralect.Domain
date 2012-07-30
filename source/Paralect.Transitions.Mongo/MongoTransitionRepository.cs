@@ -76,7 +76,7 @@ namespace Paralect.Transitions.Mongo
         public List<Transition> GetTransitions(string streamId, int fromVersion, int toVersion)
         {
             var query = Query.And(Query.EQ("_id.StreamId", streamId),
-                                  Query.GTE("_id.Version", fromVersion).LTE(toVersion));
+                                  Query.GTE("_id.Version", fromVersion), Query.LTE("_id.Version", toVersion));
 
             var sort = SortBy.Ascending("_id.Version");
 
