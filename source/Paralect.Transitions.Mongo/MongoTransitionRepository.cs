@@ -98,11 +98,9 @@ namespace Paralect.Transitions.Mongo
 
         public List<Transition> GetTransitions(int startIndex, int count)
         {
-            var query = Query.And();
-
             var sort = SortBy.Ascending("Timestamp", "_id.Version");
 
-            var docs = _transitionServer.Transitions.FindAs<BsonDocument>(query)
+            var docs = _transitionServer.Transitions.FindAllAs<BsonDocument>()
                 .SetSkip(startIndex)
                 .SetLimit(count)
                 .SetSortOrder(sort)
